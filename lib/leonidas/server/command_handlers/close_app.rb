@@ -9,7 +9,7 @@ module Leonidas
 				runs_as 'close'
 
 				def run
-					repository.close(data['name'])
+					repository.close! data['name']
 					repository.has? data['name'] ? succeed! : fail!
 				end
 

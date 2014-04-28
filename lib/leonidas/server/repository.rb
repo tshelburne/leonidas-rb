@@ -18,13 +18,17 @@ module Leonidas
 				Leonidas::Server::Registry.has_app? app_name
 			end
 
-			def watch(app)
+			def watch!(app)
 				Leonidas::Server::Registry.register_app! app
 			end
 
-			def close(app_or_name)
+			def close!(app_or_name)
 				name = app_or_name.instance_of?(Leonidas::Server::App) ? app_or_name.name : app_or_name
 				Leonidas::Server::Registry.close_app! name
+			end
+
+			def clear!
+				Leonidas::Server::Registry.clear_registry!
 			end
 
 		end

@@ -23,7 +23,7 @@ describe Leonidas::Server::CommandHandlers::FindApp do
 			end
 
 			after do
-				repository.close @app
+				repository.close! @app
 			end
 
 			it "will return the app name" do

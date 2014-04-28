@@ -11,7 +11,7 @@ describe Leonidas::Server::CommandHandlers::WatchApp do
 
 	describe '#handle' do 
 
-		after { repository.close 'test app' }
+		after { repository.close! 'test app' }
 	
 		it "will return a failure message if the given app already exists" do
 			create_app

@@ -27,7 +27,7 @@ shared_context "command_handler" do
 
 	def create_app
 		@app = Leonidas::Server::App.new('test app', 'App::Class')
-		repository.watch @app
+		repository.watch! @app
 	end
 end
 	

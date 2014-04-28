@@ -12,7 +12,7 @@ module Leonidas
 				def run
 					return fail! if repository.has? data['name']
 							
-					repository.watch Leonidas::Server::App.new(data['name'], data['type']) 
+					repository.watch! Leonidas::Server::App.new(data['name'], data['type']) 
 					succeed!
 				end
 
