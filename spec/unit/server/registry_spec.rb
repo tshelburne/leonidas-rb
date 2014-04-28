@@ -1,4 +1,4 @@
-describe Leonidas::MemoryLayer::MemoryRegistry do
+describe Leonidas::Server::Registry do
 
 	subject do
 		described_class
@@ -12,18 +12,18 @@ describe Leonidas::MemoryLayer::MemoryRegistry do
 
 		it "will reject an argument if it doesn't include Leonidas::App::App" do
 			app = { convincing_app: "not so much"}
-			expect { subject.register_app!(app) }.to raise_error(TypeError, "Argument must include Leonidas::App::App")
+			expect { subject.register_app!(app) }.to raise_error(TypeError, "Argument must be a Leonidas::Server::App")
 			subject.should_not have_app app
 		end
 
 		it "will add an app to the list of registered apps" do 
-			subject.register_app! TestClasses::TestApp.new
+			subject.register_app! Leonidas::Server::App.new('app-1', 'TestClasses::TestApp')
 			subject.retrieve_app("app-1").should_not be_nil
 		end
 
 		it "will throw an error if an app with the same name is already registered" do
-			app1 = TestClasses::TestApp.new
-			app2 = TestClasses::TestApp.new
+			app1 = Leonidas::Server::App.new('app-1', 'TestClasses::TestApp')
+			app2 = Leonidas::Server::App.new('app-1', 'TestClasses::TestApp')
 			expect { subject.register_app! app1 }.not_to raise_error
 			expect { subject.register_app! app2 }.to raise_error(StandardError, "An app with the name 'app-1' is already registered")
 			subject.retrieve_app('app-1').should eq app1
@@ -34,8 +34,8 @@ describe Leonidas::MemoryLayer::MemoryRegistry do
 	describe '::all_apps' do
 		
 		it "will return all registered apps" do
-			app1 = TestClasses::TestApp.new 'app-1'
-			app2 = TestClasses::TestApp.new 'app-2'
+			app1 = Leonidas::Server::App.new('app-1', 'TestClasses::TestApp')
+			app2 = Leonidas::Server::App.new('app-2', 'TestClasses::TestApp')
 			subject.register_app! app1
 			subject.register_app! app2
 			subject.all_apps.should eq [ app1, app2 ]
@@ -54,7 +54,7 @@ describe Leonidas::MemoryLayer::MemoryRegistry do
 		end
 
 		it "will return the app if it is registered" do 
-			app = TestClasses::TestApp.new
+			app = Leonidas::Server::App.new('app-1', 'TestClasses::TestApp')
 			subject.register_app! app
 			subject.retrieve_app("app-1").should eq app
 		end
@@ -64,7 +64,7 @@ describe Leonidas::MemoryLayer::MemoryRegistry do
 	describe '::has_app?' do 
 	
 		it "will return true if the requested app is registered" do
-			subject.register_app! TestClasses::TestApp.new
+			subject.register_app! Leonidas::Server::App.new('app-1', 'TestClasses::TestApp')
 			subject.should have_app "app-1"
 		end
 	
@@ -77,7 +77,7 @@ describe Leonidas::MemoryLayer::MemoryRegistry do
 	describe '::close_app!' do 
 	
 		it "will remove the app from the list of registered apps" do
-			subject.register_app! TestClasses::TestApp.new
+			subject.register_app! Leonidas::Server::App.new('app-1', 'TestClasses::TestApp')
 			subject.close_app! "app-1"
 			subject.should_not have_app "app-1"
 		end
@@ -91,8 +91,8 @@ describe Leonidas::MemoryLayer::MemoryRegistry do
 	describe '#clear_registry!' do 
 	
 		it "removes all apps registered" do
-			app1 = TestClasses::TestApp.new
-			app2 = TestClasses::TestApp.new("app 2")
+			app1 = Leonidas::Server::App.new('app-1', 'TestClasses::TestApp')
+			app2 = Leonidas::Server::App.new('app-2', 'TestClasses::TestApp')
 			subject.register_app! app1
 			subject.register_app! app2
 			subject.clear_registry!
