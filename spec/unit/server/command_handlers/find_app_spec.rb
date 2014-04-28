@@ -1,29 +1,5 @@
-require 'json'
-require 'socket'
-
 describe Leonidas::Server::CommandHandlers::FindApp do
-	include Leonidas::Server::AppRepository
-
-	let (:command) { subject }
-
-	before do
-		@server = TCPServer.open(14131)
-		@thread = Thread.new { Thread.current[:connection] = @server.accept }
-		@socket = TCPSocket.new('localhost', 14131)
-		@thread.join
-	end
-
-	after do
-		@server.close
-	end
-
-	def get_response
-		@response ||= JSON.parse(@socket.gets.chomp)
-	end
-
-	def clear_response
-		@response = nil
-	end
+	include_context 'command_handler'
 
 	describe '#handleable?' do 
 
@@ -43,8 +19,7 @@ describe Leonidas::Server::CommandHandlers::FindApp do
 		context 'when the app has been watched' do
 			
 			before do
-				@app = Leonidas::Server::App.new('test app', 'App::Class')
-				repository.watch @app
+				create_app
 			end
 
 			after do
