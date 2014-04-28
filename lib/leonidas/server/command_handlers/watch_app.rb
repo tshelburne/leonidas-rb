@@ -1,5 +1,5 @@
 require 'leonidas/server/app'
-require 'leonidas/server/command_handlers/base'
+require 'leonidas/server/command_handlers/runnable'
 
 module Leonidas
 	class Server
